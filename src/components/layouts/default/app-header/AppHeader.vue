@@ -32,7 +32,6 @@
             >
               <div class="header__language-icon">
                 <img src="/icons/globe.svg" alt="" />
-                <span> {{ languageValue }} </span>
               </div>
               <div
                 class="header__dropdown"
@@ -87,12 +86,12 @@
                 <ul class="header__dropdown-wrap">
                   <li class="header__dropdown-item">
                     <router-link to="/cabinet" class="header__dropdown-link">
-                      <span> Mening profilim </span>
+                      <span> {{ $t("Profile") }} </span>
                     </router-link>
                   </li>
                   <li class="header__dropdown-item" @click.prevent="logout">
                     <router-link to="/" class="header__dropdown-link">
-                      <span> Chiqish </span>
+                      <span> {{ $t("Output") }} </span>
                     </router-link>
                   </li>
                 </ul>
@@ -150,7 +149,7 @@ import "./header.css";
 import i18n from "@/locales/i18n";
 import NavigationDrawer from "./NavigationDrawer";
 import TokenService from "@/service/TokenService";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "AppHeader",
   components: { NavigationDrawer },
@@ -178,7 +177,6 @@ export default {
       accountDropdown: false,
       languageDropdown: false,
       activeId: 0,
-      languageValue: "ru",
     };
   },
   props: {
@@ -192,15 +190,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["user"]),
-    ...mapState(["isLoggedOn"]),
+    ...mapGetters(["isLoggedOn", "user"]),
     userIsLoggedOn() {
       return this.isLoggedOn;
     },
   },
   methods: {
-    ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
-    ...mapActions(["getUser"]),
+    ...mapMutations(["setAccessToken", "setIsLoggedOn", "setTestResults"]),
     activeLink(id) {
       this.activeId = id;
     },
@@ -213,7 +209,6 @@ export default {
     changeLanguage(lang) {
       localStorage.setItem("lang", lang);
       i18n.locale = lang;
-      this.languageValue = localStorage.getItem("lang");
     },
     hideAccountDropdown() {
       this.accountDropdown = false;
@@ -221,16 +216,15 @@ export default {
     hideLanguageDropdown() {
       this.languageDropdown = false;
     },
+    setToken() {
+      this.setAccessToken(null);
+      this.setIsLoggedOn(false);
+    },
     logout() {
       TokenService.removeToken();
       TokenService.removeRefreshToken();
       this.setToken();
       this.$router.push({ name: "home" });
-    },
-
-    setToken() {
-      this.setAccessToken(null);
-      this.setIsLoggedOn(false);
     },
   },
   mounted() {},

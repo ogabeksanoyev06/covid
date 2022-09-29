@@ -92,7 +92,7 @@
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
 import TokenService from "@/service/TokenService";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import "@/assets/styles/pages/login.css";
 import axios from "axios";
 export default {
@@ -121,12 +121,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["user", "isLoggedOn"]),
-    ...mapState([]),
+    ...mapState(["user", "isLoggedOn"]),
   },
   methods: {
     ...mapMutations(["setIsLoggedOn", "setAccessToken"]),
-    ...mapActions(["getUser"]),
+    ...mapActions([""]),
     showPasswordMethod() {
       this.showPassword = !this.showPassword;
       document.getElementById("password").type = this.showPassword
@@ -153,7 +152,7 @@ export default {
             TokenService.saveRefreshToken(res.data.result.refresh_token);
             this.$router.push({ name: "home" });
             this.request.password = "";
-            this.setToken();
+            this.$store.dispatch("getUser", TokenService.headersToken());
           }
         })
         .catch((error) => {
@@ -174,7 +173,11 @@ export default {
       }
     },
   },
-  async mounted() {},
+  async mounted() {
+    if (TokenService.getToken()) {
+      this.$store.dispatch("getUser", TokenService.headersToken());
+    }
+  },
   watch: {},
 };
 </script>

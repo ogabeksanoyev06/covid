@@ -8,7 +8,7 @@
         :title="item.title"
         :text="item.text"
         :photo="item.photo"
-        :id="index + 1"
+        :id="item.id"
         :maxBall="item.maxBall"
       />
     </div>
@@ -16,6 +16,7 @@
 </template>
 <script>
 import ModulesCard from "@/components/shared-components/ModulesCard.vue";
+
 export default {
   name: "app-modules",
   components: { ModulesCard },
@@ -23,7 +24,7 @@ export default {
     return {
       modules: [
         {
-          id: 0,
+          id: 1,
           title: "Модуль",
           text: "Острые респираторные вирусные инфекции",
           link: "module-one",
@@ -31,56 +32,56 @@ export default {
           maxBall: 70,
         },
         {
-          id: 1,
+          id: 2,
           title: "Модуль",
           text: "COVID-19 - новая респираторная инфекция",
           link: "module-two",
           photo: "moduleImg2.png",
         },
         {
-          id: 2,
+          id: 3,
           title: "Модуль",
           text: "Общие способы защиты от острых респираторных инфекций",
           link: "module-three",
           photo: "moduleImg3.png",
         },
         {
-          id: 3,
+          id: 4,
           title: "Модуль",
           text: "COVID-19 и ВИЧ-инфекция",
           link: "module-four",
           photo: "moduleImg4.png",
         },
         {
-          id: 4,
+          id: 5,
           title: "Модуль",
           text: "Оказание помощи женщинам с COVID-19 во время беременности и родов",
           link: "module-five",
           photo: "moduleImg5.png",
         },
         {
-          id: 5,
+          id: 6,
           title: "Модуль",
           text: "COVID-19 и права человека",
           link: "module-six",
           photo: "moduleImg6.png",
         },
         {
-          id: 6,
+          id: 7,
           title: "Модуль",
           text: "Конфиденциальность и информационная безопасность ЛЖВ",
           link: "module-seven",
           photo: "moduleImg7.png",
         },
         {
-          id: 7,
+          id: 8,
           title: "Модуль",
           text: "Навыки эффективного общения в деятельности социального работника в условиях пандемии COVID-19",
           link: "module-eight",
           photo: "moduleImg8.png",
         },
         {
-          id: 8,
+          id: 9,
           title: "Модуль",
           text: "Профилактика эмоционального выгорания у сотрудников ННО, работающих с уязвимыми группами",
           link: "module-nine",

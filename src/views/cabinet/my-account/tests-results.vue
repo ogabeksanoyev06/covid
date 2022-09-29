@@ -16,13 +16,16 @@
             </div>
           </router-link>
           <div class="tests__module-result">
-            <div class="text-center mt-3" v-if="loading">
+            <div class="text-center" v-if="loading">
               <div
                 class="spinner-border spinner-border-sm text-dark"
                 role="status"
               ></div>
             </div>
-            <div>{{ testEndBall() }}%</div>
+            <div v-if="!loading && this.testResults.result.length > 0">
+              {{ testBall() }}%
+            </div>
+            <div v-else>null</div>
           </div>
         </div>
       </div>
@@ -35,29 +38,25 @@
 import TokenService from "@/service/TokenService";
 // import TokenService from "@/service/TokenService";
 // import axios from "axios";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "tests-results",
   data() {
     return {};
   },
   methods: {
-    testResultBall() {
-      this.$store.dispatch("getTestResults", TokenService.headersToken());
-    },
-    testEndBall() {
-      if (this.testResults) {
+    testBall() {
+      if (this.testResults.result.length > 0) {
         return this.testResults.result[this.testResults.result.length - 1]
           .testBall;
       }
     },
   },
   computed: {
-    ...mapState(["testResults", "loading"]),
+    ...mapGetters(["testResults", "loading"]),
   },
   mounted() {
-    this.testResultBall();
-    console.log(this.testEndBall());
+    this.$store.dispatch("getTestResults", TokenService.headersToken());
   },
 };
 </script>

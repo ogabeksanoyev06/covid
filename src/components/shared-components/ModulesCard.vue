@@ -11,7 +11,7 @@
         :class="isLoggedOn ? 'active' : ''"
         @click="goToLink"
       >
-        Подробнее
+        {{ $t("Details") }}
       </button>
     </div>
     <div class="app-card__photo">
@@ -31,6 +31,7 @@ export default {
   data() {
     return {
       status: false,
+      resultModuleId: [],
     };
   },
   props: {
@@ -63,16 +64,22 @@ export default {
         this.setIsLoggedOn(false);
       }
     },
-    testResultBall() {
+    filterModuleId(idx) {
+      this.resultModuleId = [];
+      if (this.testResults && this.testResults.result.length > 0) {
+        this.testResults.result.map((item) => {
+          if (item.modulId == idx) {
+            this.resultModuleId.push(item);
+          }
+        });
+      }
+    },
+    getTest() {
       this.$store.dispatch("getTestResults", TokenService.headersToken());
     },
     testStatus() {
-      if (this.testResults.length > 0) {
-        let testBall =
-          this.testResults.result[this.testResults.result.length - 1].testBall;
-        if (testBall > this.maxBall) {
-          this.status = true;
-        }
+      if (this.resultModuleId[this.resultModuleId.length - 1].testBall > 45) {
+        this.status = true;
       }
     },
   },
@@ -80,12 +87,21 @@ export default {
     ...mapState(["isLoggedOn", "loading", "testResults"]),
   },
   mounted() {
-    this.setToken();
-    this.testStatus();
-    if (TokenService.getToken()) {
-      this.testResultBall();
+    this.filterModuleId(this.id);
+    if (this.resultModuleId.length > 0) {
+      this.testStatus();
+      console.log(
+        this.id,
+        " ",
+        this.resultModuleId[this.resultModuleId.length - 1].testBall
+      );
     }
+    if (TokenService.getToken() !== null) {
+      this.getTest();
+    }
+    console.log(this.status);
   },
+  created() {},
 };
 </script>
 <style scoped></style>

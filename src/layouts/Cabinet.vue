@@ -15,7 +15,7 @@
     <div class="page__wrap">
       <div class="container">
         <div class="section__top mb-30">
-          <p>Mening profilim</p>
+          <p>{{ $t("Profile") }}</p>
         </div>
         <div class="content">
           <div class="sidebar sm mt-20">
@@ -92,8 +92,7 @@ import AppHeader from "@/components/layouts/default/app-header/AppHeader";
 import TokenService from "@/service/TokenService";
 import "../assets/styles/pages/cabinet.css";
 import ImageUploader from "vue-image-upload-resize";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import axios from "axios";
+import {  mapMutations, mapState } from "vuex";
 
 export default {
   name: "AppCabinet",
@@ -114,19 +113,22 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([]),
     ...mapState(["user", "loading"]),
     currentRouteName() {
       return this.$route.name;
     },
   },
   methods: {
-    ...mapActions(["getUser"]),
     ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
-
     setToken() {
-      this.setAccessToken(null);
-      this.setIsLoggedOn(TokenService.getToken());
+      let accessToken = TokenService.getToken();
+      if (accessToken !== null) {
+        this.setAccessToken(accessToken);
+        this.setIsLoggedOn(true);
+      } else {
+        this.setAccessToken(null);
+        this.setIsLoggedOn(false);
+      }
     },
     logout() {
       TokenService.removeToken();
@@ -154,11 +156,6 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch(
-      "getUser",
-      (axios.defaults.headers.common["Authorization"] =
-        "Bearer " + TokenService.getToken())
-    );
     this.setToken();
   },
 };

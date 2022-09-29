@@ -1,16 +1,5 @@
 <template>
   <div>
-    <!-- <app-loading
-      :active="''"
-      :can-cancel="''"
-      :color="'#008AE4'"
-      :height="70"
-      :is-full-page="true"
-      :loader="'bars'"
-      :opacity="0.8"
-      :transition="''"
-      :width="70"
-    ></app-loading> -->
     <AppHeader />
     <div class="page__wrap">
       <router-view />
@@ -21,22 +10,27 @@
 <script>
 import AppFooter from "../components/layouts/default/app-footer/AppFooter";
 import AppHeader from "../components/layouts/default/app-header/AppHeader";
-import { mapMutations, mapState } from "vuex";
+import TokenService from "@/service/TokenService";
+import { mapMutations } from "vuex";
 export default {
   name: "MainLayout",
   components: { AppHeader, AppFooter },
   methods: {
-    ...mapMutations(["setLoading"]),
+    ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
+    setToken() {
+      let accessToken = TokenService.getToken();
+      if (accessToken !== null) {
+        this.setAccessToken(accessToken);
+        this.setIsLoggedOn(true);
+      } else {
+        this.setAccessToken(null);
+        this.setIsLoggedOn(false);
+      }
+    },
   },
-  computed: {
-    ...mapState({ loading: "loading" }),
-  },
+  computed: {},
   mounted() {
-    // document.onreadystatechange = () => {
-    //   if (document.readyState == "complete") {
-    //     this.setLoading(true);
-    //   }
-    // };
+    this.setToken();
   },
 };
 </script>

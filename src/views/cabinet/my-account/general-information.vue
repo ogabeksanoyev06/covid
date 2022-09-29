@@ -94,7 +94,7 @@
 </template>
 <script>
 import TokenService from "@/service/TokenService";
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "my-account",
   components: {},
@@ -115,7 +115,6 @@ export default {
     ...mapGetters(["user"]),
   },
   methods: {
-    ...mapActions(["getUser"]),
     ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
     logout() {
       TokenService.removeToken();
@@ -140,14 +139,7 @@ export default {
         : "password";
     },
   },
-  mounted() {
-    let config = {
-      headers: {
-        Authorization: "Bearer " + TokenService.getToken(),
-      },
-    };
-    this.$store.dispatch("getUser", config);
-  },
+  mounted() {},
 };
 </script>
 <style scoped>

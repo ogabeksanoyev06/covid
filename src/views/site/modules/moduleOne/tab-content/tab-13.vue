@@ -8,9 +8,9 @@
         <tbody>
           <tr class="text-center" v-for="(item, idx) in 1" :key="idx">
             <th scope="row">{{ idx + 1 }}-Модуль</th>
-            <td v-for="(result, i) in testResults.result" :key="i">
-              {{ result.testBall }}
-            </td>
+            <!-- <td v-for="(result, i) in setTestsModuleId" :key="i">
+              {{ result.testBall}}
+            </td> -->
           </tr>
         </tbody>
       </table>
@@ -24,9 +24,18 @@ export default {
   data() {
     return {
       selectedIndex: 0,
+      setTestsModuleId: [],
     };
   },
-  methods: {},
+  methods: {
+    // filterModuleId(id) {
+    //   this.testResults.result.map((item) => {
+    //     if (item.modulId === id) {
+    //       this.setTestsModuleId.push(item);
+    //     }
+    //   });
+    // },
+  },
   computed: {
     ...mapState(["testResults"]),
   },

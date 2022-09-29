@@ -12,8 +12,9 @@ const TokenService = {
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
   },
   headersToken() {
-    return (axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem(FRONT_TOKEN_KEY));
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + localStorage.getItem(FRONT_TOKEN_KEY);
+    return;
   },
   saveRefreshToken(token) {
     localStorage.setItem(FRONT_REFRESH_TOKEN_KEY, token);

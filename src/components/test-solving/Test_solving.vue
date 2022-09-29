@@ -2,7 +2,10 @@
   <div class="test__body" id="test_solving_component">
     <!-- <TestPagination class="mb-40" :questions-prop="questionsProp.questions" /> -->
     <div class="d-flex flex-column align-items-center" v-if="!testSolving">
-      <div class="result__test">{{ testEndBall() }} %</div>
+      <div class="result__test">
+        <div v-if="testResults.result.length > 0">{{ testResultBall() }} %</div>
+        <div v-else>null</div>
+      </div>
       <button
         @click="start(questionsProp.questions)"
         class="modal_footer-btn refresh_btn"
@@ -60,20 +63,20 @@
       <div class="modal__wrap">
         <div class="modal__body">
           <div class="progress__bar">
-            <div
-              class="progress__bar-line"
-              :style="{
-                width: testEndBall() + '%',
-              }"
-            ></div>
+            <div class="progress__bar-line" :style="{ width: '%' }"></div>
           </div>
-          <div class="text-center mt-3" v-if="loading">
+          <div class="text-center" v-if="loading">
             <div
               class="spinner-border spinner-border-sm text-dark"
               role="status"
             ></div>
           </div>
-          <div class="result__test" v-if="!loading">{{ testEndBall() }}%</div>
+          <div class="result__test">
+            <div v-if="!loading && testResults.result.length > 0">
+              {{ testResultBall() }}%
+            </div>
+            <div v-else>null</div>
+          </div>
         </div>
         <div class="modal_footer">
           <button
@@ -92,11 +95,10 @@
 </template>
 
 <script>
-// import TestPagination from "@/components/shared-components/TestPagination.vue";
 import AppModal from "@/components/shared-components/AppModal.vue";
 import TokenService from "@/service/TokenService";
 import axios from "axios";
-import { mapGetters, mapMutations, mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "Test_solving",
   components: { AppModal },
@@ -106,36 +108,31 @@ export default {
       selectedAnswer: [],
       quesCount: null,
       onlineTestAnswers: false,
-      testCount: 10,
+      testCount: this.questionsProp.quesCount,
       maxBall: this.questionsProp.maxBall,
       testBall: null,
       beginDate: "2022-09-19T06:01:14.691Z",
       endDate: "2022-09-19T06:01:14.691Z",
-      modulId: 0,
+      moduleId: this.questionsProp.moduleId,
       disabledBtn: true,
+      resultModuleId: [],
     };
   },
   props: {
     questionsProp: {
-      id: null,
-      endDate: null,
-      maxBall: 0,
-      quesCount: 0,
+      id: Number,
+      maxBall: Number,
+      quesCount: Number,
+      moduleId: Number,
       questions: [],
     },
   },
   computed: {
-    ...mapGetters(["testSolving"]),
-    ...mapState(["testResults", "loading"]),
+    ...mapState(["testSolving", "testResults", "loading"]),
   },
   methods: {
     ...mapMutations(["setTestSolving"]),
     async testFinish() {
-      let config = {
-        headers: {
-          Authorization: "Bearer " + TokenService.getToken(),
-        },
-      };
       this.setTestSolving(false);
       this.onlineTestAnswers = true;
       this.quesCount = this.selectedAnswer.filter((answer) => answer.isTrue);
@@ -154,13 +151,14 @@ export default {
               testBall: this.testBall,
               beginDate: this.beginDate,
               endDate: this.endDate,
-              modulId: 1,
+              modulId: this.moduleId,
             },
-            config
+            TokenService.headersToken()
           )
           .then((data) => {
             if (!data.error && data) {
-              console.log(data);
+              this.testResultBall();
+              console.log(this.testBall);
             }
           })
           .catch((error) => {
@@ -169,7 +167,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
-      this.testResultBall();
+      this.getTest();
     },
     closeModal() {
       this.onlineTestAnswers = false;
@@ -184,17 +182,33 @@ export default {
       array.sort(() => Math.random() - 0.3);
       this.selectedAnswer = [];
     },
-    testResultBall() {
-      this.$store.dispatch("getTestResults", TokenService.headersToken());
-    },
-    testEndBall() {
-      if (this.testResults) {
-        return this.testResults.result[this.testResults.result.length - 1]
-          .testBall;
+    filterModuleId(idx) {
+      this.resultModuleId = [];
+      if (this.testResults && this.testResults.result.length > 0) {
+        this.testResults.result.map((item) => {
+          if (item.modulId == idx) {
+            this.resultModuleId.push(item);
+          }
+        });
       }
     },
+    testResultBall() {
+      if (this.resultModuleId.length > 0) {
+        return this.resultModuleId[this.resultModuleId.length - 1].testBall;
+      }
+    },
+    getTest() {
+      this.$store.dispatch("getTestResults", TokenService.headersToken());
+    },
   },
-  mounted() {},
+  mounted() {
+    if (TokenService.getToken() !== null) {
+      this.getTest();
+    }
+    this.filterModuleId(this.moduleId);
+    this.testResultBall();
+    console.log(this.resultModuleId);
+  },
   watch: {},
   created() {},
 };

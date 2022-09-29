@@ -63,7 +63,7 @@
           <tab-9 v-show="isActive(7)" />
           <tab-10 v-show="isActive(8)" />
           <tab-11 v-show="isActive(9)" />
-          <tab-12 v-show="isActive(10)" @newDate="newDate" :beginDate="date" />
+          <tab-12 v-show="isActive(10)" @newDate="newDate" />
           <tab-13 v-show="isActive(11)" />
           <div>
             <div style="margin: 30px 0" class="divider" />
@@ -312,7 +312,7 @@ export default {
       }
     },
     newDate() {
-      this.date = new Date();
+      this.$emit("newDate", new Date());
     },
   },
 };

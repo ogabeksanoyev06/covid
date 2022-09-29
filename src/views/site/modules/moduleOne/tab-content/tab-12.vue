@@ -314,6 +314,7 @@ export default {
         maxBall: 70,
         quesCount: 10,
         beginDate: this.beginDate,
+        moduleId: 1,
       },
     };
   },

@@ -7,7 +7,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import HeroBanner from "@/components/pages/home/HeroBanner.vue";
 import AppModules from "../modules/AppModules.vue";
@@ -16,7 +15,9 @@ export default {
   name: "app-home",
   components: { HeroBanner, AppModules },
   data() {
-    return {};
+    return {
+      resultModuleId: [],
+    };
   },
   methods: {
     ...mapActions(["getUser"]),
@@ -25,8 +26,8 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["user", "isLoggedOn"]),
-    ...mapState([]),
+    ...mapGetters([]),
+    ...mapState(["user", "isLoggedOn", "testResults"]),
   },
   mounted() {},
 };

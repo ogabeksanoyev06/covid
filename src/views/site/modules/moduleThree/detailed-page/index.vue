@@ -59,6 +59,7 @@
           <tab-4 v-show="isActive(3)" />
           <tab-5 v-show="isActive(4)" />
           <tab-6 v-show="isActive(5)" />
+          <tab-7 v-show="isActive(6)" />
           <div>
             <div style="margin: 30px 0" class="divider" />
             <div class="content__main-btn">
@@ -116,10 +117,21 @@ import Tab3 from "@/views/site/modules/moduleThree/tab-content/tab-3.vue";
 import Tab4 from "@/views/site/modules/moduleThree/tab-content/tab-4.vue";
 import Tab5 from "@/views/site/modules/moduleThree/tab-content/tab-5.vue";
 import Tab6 from "@/views/site/modules/moduleThree/tab-content/tab-6.vue";
+import Tab7 from "@/views/site/modules/moduleThree/tab-content/tab-7.vue";
 import "@/assets/styles/pages/detailed-page.css";
 export default {
   name: "detailedPage",
-  components: { Accordion, AccordionItem, Tab1, Tab2, Tab3, Tab4, Tab5, Tab6 },
+  components: {
+    Accordion,
+    AccordionItem,
+    Tab1,
+    Tab2,
+    Tab3,
+    Tab4,
+    Tab5,
+    Tab6,
+    Tab7,
+  },
   data() {
     return {
       contentId: 0,
@@ -172,6 +184,20 @@ export default {
             {
               id: 5,
               name: "Как правильно использовать медицинскую маску для профилактики ОРИ и COVID-19",
+            },
+          ],
+        },
+        {
+          id: 4,
+          name: "Тест",
+          contentList: [
+            {
+              id: 6,
+              name: "Тест",
+            },
+            {
+              id: 7,
+              name: "Мои баллы",
             },
           ],
         },

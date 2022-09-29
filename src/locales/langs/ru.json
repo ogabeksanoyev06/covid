@@ -6,6 +6,9 @@
     "Enter": "Войти",
     "Registration": "Регистрация",
     "Modules": "МОДУЛЫ",
-    "Module": "Модуль"
+    "Module": "Модуль",
+    "Details": "Подробности",
+    "Profile": "Мой профиль",
+    "Output": "Выход"
   }
 }
